@@ -25,8 +25,20 @@ class GetNote(generics.RetrieveAPIView):
 
 class Save(APIView):
     def post(self,request):
-        note = Note.objects.create(uid=request.data['uid'],text=request.data['text'])
+        note = Note.objects.create(
+            uid=request.data['uid'],
+            text=request.data['text']
+        )
         if request.FILES.getlist('files'):
             for file in request.FILES.getlist('files'):
                 Image.objects.create(note=note,file=file)
+        return Response(status=200)
+
+
+class Upadate(APIView):
+    def post(self,request):
+        note = Note.objects.get(uid=request.data['uid'])
+        note.wallet = request.data['wallet']
+        note.twitter = request.data['twitter']
+        note.save()
         return Response(status=200)

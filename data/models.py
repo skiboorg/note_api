@@ -1,10 +1,17 @@
 from django.db import models
 
 class Note(models.Model):
-    uid = models.CharField(max_length=10,blank=True,null=True)
+    uid = models.CharField(max_length=20,blank=True,null=True)
     text = models.TextField(blank=True,null=True)
+    wallet = models.TextField(blank=True,null=True)
+    twitter = models.CharField(max_length=100,blank=True,null=True)
+    is_wl = models.BooleanField(default=False,null=False)
     is_viewed = models.BooleanField(default=False,null=False)
     is_forever = models.BooleanField(default=False,null=False)
+
+    def __str__(self):
+        return self.uid
+
 
 
 class Link(models.Model):
