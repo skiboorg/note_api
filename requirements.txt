@@ -1,2 +1,5 @@
 djangorestframework
 django-cors-headers
+
+djoser
+openpyxl

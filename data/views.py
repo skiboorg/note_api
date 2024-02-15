@@ -42,3 +42,18 @@ class Upadate(APIView):
         note.twitter = request.data['twitter']
         note.save()
         return Response(status=200)
+
+
+class Fill(APIView):
+
+    def get(self,request):
+        from openpyxl import load_workbook
+        wb = load_workbook(filename='gen.xlsx')
+        sheet_obj = wb.active
+        max_row = sheet_obj.max_row
+        for i in range(2, max_row+1):
+            uid = sheet_obj.cell(row=i, column=1).value
+            text = sheet_obj.cell(row=i, column=2).value
+            is_wl = sheet_obj.cell(row=i, column=3).value
+            Note.objects.create(uid=uid,text=text,is_wl=is_wl)
+        return Response(status=200)
