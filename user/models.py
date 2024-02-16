@@ -53,7 +53,7 @@ class User(AbstractUser):
     email = models.CharField(max_length=255, blank=True, null=True, unique=True)
     twitter = models.CharField(max_length=255, blank=True, null=True)
     wallet = models.CharField(max_length=255, blank=True, null=True)
-    code = models.CharField(max_length=10, blank=True, null=True)
+    code = models.CharField(max_length=255, blank=True, null=True)
     avatar = models.FileField(upload_to='usr/ava',blank=True, null=True)
     is_in_wl = models.BooleanField(default=False, blank=True)
 
