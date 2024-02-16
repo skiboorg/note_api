@@ -10,10 +10,10 @@ class LinkInline(admin.TabularInline):
     extra = 0
 
 class NoteAdmin(admin.ModelAdmin):
-    list_display = ('uid','wallet','twitter','get_textt','is_wl','is_viewed')
+    list_display = ('uid','wallet','twitter','get_textt','is_wl','is_viewed','only_twitter',)
     search_fields = ('uid','wallet','twitter',)
     list_filter = (
-        'is_wl','is_viewed','is_forever'
+        'is_wl','is_viewed','is_forever','only_twitter',
     )
     model = Note
 

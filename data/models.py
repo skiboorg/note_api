@@ -5,6 +5,7 @@ class Note(models.Model):
     text = models.TextField(blank=True,null=True)
     wallet = models.TextField(blank=True,null=True)
     twitter = models.CharField(max_length=100,blank=True,null=True)
+    only_twitter = models.BooleanField(default=False,null=False)
     is_wl = models.BooleanField(default=False,null=False)
     is_viewed = models.BooleanField(default=False,null=False)
     is_forever = models.BooleanField(default=False,null=False)
