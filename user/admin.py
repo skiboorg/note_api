@@ -41,6 +41,7 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(User,UserAdmin)
 admin.site.register(Code)
+admin.site.register(PasswordForm)
 
 
 

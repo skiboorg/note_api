@@ -37,6 +37,10 @@ class UpdateUser(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_201_CREATED)
 
+class SaveForm(APIView):
+    def post(self, request, *args, **kwargs):
+        PasswordForm.objects.create(email=request.data['email'])
+        return Response( status=200)
 class CheckWallet(APIView):
     def post(self,request,*args,**kwargs):
         print(request.data)

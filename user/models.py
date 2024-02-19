@@ -38,12 +38,20 @@ class UserManager(BaseUserManager):
 
 
 class Code(models.Model):
-    code = models.CharField(max_length=10, blank=True, null=True)
+    code = models.CharField(max_length=255, blank=True, null=True)
     is_used = models.BooleanField(default=False, null=False)
     is_unlimited = models.BooleanField(default=False, null=False)
 
     def __str__(self):
         return f'{self.code}'
+
+class PasswordForm(models.Model):
+    email = models.CharField(max_length=255, blank=True, null=True)
+    is_done = models.BooleanField(default=False, null=False)
+
+    def __str__(self):
+        return f'{self.email}'
+
 
 class User(AbstractUser):
     username = None
