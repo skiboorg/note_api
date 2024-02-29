@@ -1,12 +1,9 @@
-import json
+from random import choices
+import string
 
-import requests
-
-
-def send_tg_mgs(to_id,message):
-    Headers = { 'Content-Type':'application/json'}
-    data = {
-        "chat_id":to_id,
-        "message":message
-    }
-    res = requests.post('http://0.0.0.0:5000/send_message',headers=Headers,data=json.dumps(data))
+def create_random_string(digits=False, num=4):
+    if not digits:
+        random_string = ''.join(choices(string.ascii_uppercase + string.digits, k=num))
+    else:
+        random_string = ''.join(choices(string.digits, k=num))
+    return random_string
