@@ -41,6 +41,7 @@ class Code(models.Model):
     code = models.CharField(max_length=255, blank=True, null=True)
     is_used = models.BooleanField(default=False, null=False)
     is_unlimited = models.BooleanField(default=False, null=False)
+    use_number = models.IntegerField(default=0, blank=False)
 
     def __str__(self):
         return f'{self.code}'

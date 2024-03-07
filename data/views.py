@@ -48,7 +48,7 @@ class Fill(APIView):
 
     def get(self,request):
         from openpyxl import load_workbook
-        wb = load_workbook(filename='gen2.xlsx')
+        wb = load_workbook(filename='gen3.xlsx')
         sheet_obj = wb.active
         max_row = sheet_obj.max_row
         x=0
@@ -57,7 +57,7 @@ class Fill(APIView):
             text = sheet_obj.cell(row=i, column=2).value
             #only_twitter = sheet_obj.cell(row=i, column=3).value
             if uid:
-                Note.objects.create(uid=uid,text=text,only_twitter=True)
+                Note.objects.create(uid=uid,text=text,only_twitter=True,is_wl=True)
                 x+=1
         print(x)
         return Response(status=200)
