@@ -11,7 +11,7 @@ class Note(models.Model):
     is_forever = models.BooleanField(default=False,null=False)
 
     def __str__(self):
-        return self.uid
+        return f'{self.uid}'
 
 
 

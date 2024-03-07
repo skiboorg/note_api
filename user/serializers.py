@@ -36,6 +36,7 @@ class UserSerializer(serializers.ModelSerializer):
             'wallet',
             "avatar",
             "is_in_wl",
+            "code"
         ]
 
         extra_kwargs = {

@@ -21,7 +21,7 @@ class UserAdmin(BaseUserAdmin):
                        'password1',
                        'password2',
                        ), }),)
-    search_fields = ('id','email', )
+    search_fields = ('id','email','code' )
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
@@ -33,6 +33,7 @@ class UserAdmin(BaseUserAdmin):
              'wallet',
                 "avatar",
                 "is_in_wl",
+             "code"
 
          )}
          ),

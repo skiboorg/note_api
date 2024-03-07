@@ -14,6 +14,8 @@ logger = logging.getLogger(__name__)
 from .services import create_random_string
 import settings
 
+from rest_framework.parsers import MultiPartParser
+
 class GetUser(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserSerializer
@@ -23,14 +25,18 @@ class GetUser(generics.RetrieveAPIView):
 
 
 class UpdateUser(APIView):
+    #parser_classes = [MultiPartParser]
     def post(self,request,*args,**kwargs):
-        print(request.data)
+        # print(request.data)
+        # print(request.data.get('email',None))
+        # print(request.FILES.get('file'))
         instance = User.objects.get(email=request.data['email'])
 
         serializer = UserSerializer(instance,data=request.data)
 
         if serializer.is_valid():
             obj = serializer.save()
+            #obj.avatar  = request.FILES.get('file')
             obj.save()
 
         else:
