@@ -6,6 +6,7 @@ urlpatterns = [
     path('save', views.Save.as_view()),
     path('update', views.Upadate.as_view()),
     path('fill', views.Fill.as_view()),
+    path('dao_request', views.DaoRequestView.as_view()),
 
 
 

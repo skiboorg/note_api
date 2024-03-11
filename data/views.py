@@ -44,6 +44,26 @@ class Upadate(APIView):
         return Response(status=200)
 
 
+class DaoRequestView(APIView):
+    def post(self, request):
+        data = request.data
+        print(request.FILES.getlist('file'))
+        result = {'status':True}
+
+        try:
+            code = DaoCode.objects.get(code=data['code'],is_used=False)
+            # code.is_used = True
+            # code.save()
+            obj = DaoRequest.objects.create(code=code,twitter=data['twitter'],dao_twitter=data['dao_twitter'])
+            if request.FILES.getlist('file'):
+                obj.file = request.FILES['file']
+                obj.save()
+        except:
+            result = {'status': False}
+
+
+        return Response(result, status=200)
+
 class Fill(APIView):
 
     def get(self,request):

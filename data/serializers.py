@@ -18,4 +18,18 @@ class NoteSerializer(serializers.ModelSerializer):
 
 
 
+class DaoCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DaoCode
+        fields = '__all__'
+
+
+class DaoRequestSerializer(serializers.ModelSerializer):
+    code = DaoCodeSerializer(read_only=True)
+    class Meta:
+        model = DaoRequest
+        fields = '__all__'
+
+
+
 
