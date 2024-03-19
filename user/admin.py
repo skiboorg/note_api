@@ -13,6 +13,7 @@ class UserAdmin(BaseUserAdmin):
         'is_in_wl',
         'fk_wl_1',
         'fk_wl_2',
+        'date_joined'
 
     )
     ordering = ('id',)
@@ -37,6 +38,8 @@ class UserAdmin(BaseUserAdmin):
              'wallet',
                 "avatar",
                 "is_in_wl",
+             'fk_wl_1',
+             'fk_wl_2',
              "code"
 
          )}
