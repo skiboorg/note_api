@@ -65,6 +65,8 @@ class User(AbstractUser):
     code = models.CharField(max_length=255, blank=True, null=True)
     avatar = models.FileField(upload_to='usr/ava',blank=True, null=True)
     is_in_wl = models.BooleanField(default=False, blank=True)
+    fk_wl_1 = models.BooleanField(default=False, blank=True)
+    fk_wl_2 = models.BooleanField(default=False, blank=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

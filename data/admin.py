@@ -28,6 +28,7 @@ class DaoRequestAdmin(admin.ModelAdmin):
     list_display = ('code', 'twitter', 'dao_twitter',)
     search_fields = ('twitter', 'dao_twitter',)
     model = DaoRequest
+
 admin.site.register(Note,NoteAdmin)
 admin.site.register(DaoCode)
 admin.site.register(DaoRequest,DaoRequestAdmin)
