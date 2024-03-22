@@ -13,6 +13,8 @@ class UserAdmin(BaseUserAdmin):
         'is_in_wl',
         'fk_wl_1',
         'fk_wl_2',
+        'balance',
+        'code',
         'date_joined'
 
     )
@@ -40,7 +42,8 @@ class UserAdmin(BaseUserAdmin):
                 "is_in_wl",
              'fk_wl_1',
              'fk_wl_2',
-             "code"
+             "code",
+             "balance"
 
          )}
          ),

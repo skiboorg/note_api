@@ -59,6 +59,18 @@ class SaveForm(APIView):
         except:
             result['success'] = False
         return Response(result, status=200)
+
+
+class Claim(APIView):
+    def post(self, request, *args, **kwargs):
+        print(request.data)
+        user= User.objects.get(email=request.data['e'])
+        print(user)
+        user.balance+=1
+        user.save()
+        return Response(status=200)
+
+
 class CheckWallet(APIView):
     def post(self,request,*args,**kwargs):
         print(request.data)

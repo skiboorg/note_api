@@ -64,6 +64,7 @@ class User(AbstractUser):
     wallet = models.CharField(max_length=255, blank=True, null=True)
     code = models.CharField(max_length=255, blank=True, null=True)
     avatar = models.FileField(upload_to='usr/ava',blank=True, null=True)
+    balance = models.IntegerField(default=0, blank=True)
     is_in_wl = models.BooleanField(default=False, blank=True)
     fk_wl_1 = models.BooleanField(default=False, blank=True)
     fk_wl_2 = models.BooleanField(default=False, blank=True)
