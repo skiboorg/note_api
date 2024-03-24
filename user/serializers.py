@@ -22,9 +22,14 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-
-
-
+class UserSaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'email',
+            'twitter',
+            'wallet'
+        ]
 
 
 class UserSerializer(serializers.ModelSerializer):

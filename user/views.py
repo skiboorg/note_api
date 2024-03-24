@@ -30,9 +30,9 @@ class UpdateUser(APIView):
         # print(request.data)
         # print(request.data.get('email',None))
         # print(request.FILES.get('file'))
-        instance = User.objects.get(email=request.data['email'])
+        instance = request.user #User.objects.get(email=request.data['email'])
 
-        serializer = UserSerializer(instance,data=request.data)
+        serializer = UserSaveSerializer(instance,data=request.data)
 
         if serializer.is_valid():
             obj = serializer.save()
@@ -78,7 +78,8 @@ class CheckWallet(APIView):
 
         try:
             note = Note.objects.get(wallet=request.data['wallet'])
-            instance = User.objects.get(wallet=request.data['wallet'])
+            wall = User.objects.get(wallet=request.data['wallet'])
+            instance = request.user #instance = User.objects.get(wallet=request.data['wallet'])
             instance.is_in_wl = True
             instance.save()
             result = {'success': True}
