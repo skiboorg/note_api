@@ -7,6 +7,7 @@ urlpatterns = [
     path('update', views.Upadate.as_view()),
     path('fill', views.Fill.as_view()),
     path('dao_request', views.DaoRequestView.as_view()),
+    path('captha', views.GetCaptcha.as_view()),
 
 
 

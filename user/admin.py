@@ -15,6 +15,7 @@ class UserAdmin(BaseUserAdmin):
         'fk_wl_2',
         'balance',
         'code',
+        'can_claim',
         'date_joined'
 
     )
@@ -28,7 +29,7 @@ class UserAdmin(BaseUserAdmin):
                        'password1',
                        'password2',
                        ), }),)
-    search_fields = ('id','email','code' )
+    search_fields = ('id','email','code','twitter','wallet', )
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
@@ -43,16 +44,25 @@ class UserAdmin(BaseUserAdmin):
              'fk_wl_1',
              'fk_wl_2',
              "code",
-             "balance"
+             "balance",
+             'can_claim',
+             'errors',
+             'blocked',
 
          )}
          ),
         ('Permissions', {'fields': ('is_staff', 'is_superuser', 'groups',)}),)
 
 class CodeAdmin(admin.ModelAdmin):
-    list_display = ('code', 'is_used', 'is_unlimited',)
+    readonly_fields = ('use_count',)
+
+    list_display = ('code', 'is_used', 'is_unlimited','use_count')
     search_fields = ('code',)
+    list_filter=('is_used', 'is_unlimited',)
     model = Code
+
+    def use_count(self, obj):
+        return User.objects.filter(code=obj.code).count()
 
 
 admin.site.register(User, UserAdmin)

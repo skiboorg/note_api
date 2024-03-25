@@ -6,13 +6,15 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .models import *
 from rest_framework import generics, viewsets, parsers
-from data.models import Note
+from data.models import Note,SentCaptcha
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 import logging
 logger = logging.getLogger(__name__)
 from .services import create_random_string
 import settings
+import datetime
+from django.utils.timezone import now
 
 from rest_framework.parsers import MultiPartParser
 
@@ -21,7 +23,13 @@ class GetUser(generics.RetrieveAPIView):
     serializer_class = UserSerializer
 
     def get_object(self):
-        return self.request.user
+        user = self.request.user
+        if not user.can_claim:
+            if now() >= user.blocked + datetime.timedelta(seconds=33):
+                user.can_claim = True
+                user.blocked = None
+                user.save()
+        return user
 
 
 class UpdateUser(APIView):
@@ -62,13 +70,36 @@ class SaveForm(APIView):
 
 
 class Claim(APIView):
+    permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
         print(request.data)
-        user= User.objects.get(email=request.data['e'])
+        user= request.user
         print(user)
-        user.balance+=1
+        if not user.can_claim:
+            return Response({'s': False}, status=200)
+        if user.errors >= 3:
+            user.can_claim = False
+            user.errors = 0
+            user.blocked = datetime.datetime.now()
+            user.save()
+
+        capUid = request.data['c']
+        sentCap = SentCaptcha.objects.filter(uid=capUid,user=user)
+        if not sentCap.exists():
+            user.errors += 1
+            user.save()
+            return Response({'s':False},status=200)
+        captcha = sentCap[0]
+        if captcha.captcha.code != request.data['code']:
+            user.errors += 1
+            user.save()
+            captcha.delete()
+            return Response({'s': False}, status=200)
+
+        user.balance += request.data['amount']
         user.save()
-        return Response(status=200)
+        captcha.delete()
+        return Response({'s':True},status=200)
 
 
 class CheckWallet(APIView):

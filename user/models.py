@@ -68,6 +68,9 @@ class User(AbstractUser):
     is_in_wl = models.BooleanField(default=False, blank=True)
     fk_wl_1 = models.BooleanField(default=False, blank=True)
     fk_wl_2 = models.BooleanField(default=False, blank=True)
+    errors = models.IntegerField(default=0)
+    blocked = models.DateTimeField(blank=True,null=True)
+    can_claim = models.BooleanField(default=True, blank=True, null=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

@@ -42,7 +42,8 @@ class UserSerializer(serializers.ModelSerializer):
             "avatar",
             "is_in_wl",
             "code",
-            "balance"
+            "balance",
+            'can_claim'
         ]
 
         extra_kwargs = {

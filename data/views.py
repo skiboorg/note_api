@@ -1,8 +1,10 @@
 import json
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
+from .models import *
 
 def query_dict_to_json(query):
     json_data = {}
@@ -43,6 +45,22 @@ class Upadate(APIView):
         note.save()
         return Response(status=200)
 
+
+class GetCaptcha(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        if request.user.can_claim:
+            captcha = Captcha.objects.order_by('?').first()
+
+            sended = SentCaptcha.objects.create(
+                user=request.user,
+                captcha=captcha
+            )
+            seriazer = SentCapSerializer(sended)
+            return Response(seriazer.data, status=200)
+        else:
+            return Response(status=200)
 
 class DaoRequestView(APIView):
     def post(self, request):

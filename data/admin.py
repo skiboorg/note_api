@@ -32,4 +32,6 @@ class DaoRequestAdmin(admin.ModelAdmin):
 admin.site.register(Note,NoteAdmin)
 admin.site.register(DaoCode)
 admin.site.register(DaoRequest,DaoRequestAdmin)
+admin.site.register(Captcha)
+admin.site.register(SentCaptcha)
 
