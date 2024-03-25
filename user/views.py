@@ -77,7 +77,7 @@ class Claim(APIView):
         print(user)
         if not user.can_claim:
             return Response({'s': False}, status=200)
-        if user.errors >= 3:
+        if user.errors >= 99:
             user.can_claim = False
             user.errors = 0
             user.blocked = datetime.datetime.now()
