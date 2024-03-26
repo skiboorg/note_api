@@ -84,7 +84,7 @@ class Claim(APIView):
             user.save()
 
         capUid = request.data['c']
-        sentCap = SentCaptcha.objects.filter(uid=capUid,user=user)
+        sentCap = SentCaptcha.objects.filter(uid=capUid) #,user=user
         if not sentCap.exists():
             user.errors += 1
             user.save()
