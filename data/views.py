@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
 from .models import *
-
+from uuid import uuid4
 def query_dict_to_json(query):
     json_data = {}
     for dat in query:
@@ -51,9 +51,14 @@ class GetCaptcha(APIView):
 
     def get(self, request):
         if request.user.can_claim:
+            uid = uuid4()
             captcha = Captcha.objects.order_by('?').first()
+            exist = SentCaptcha.objects.filter(uid=uid)
+            if exist.exists():
+                exist.delete()
 
             sended = SentCaptcha.objects.create(
+                uid=uid,
                 user=request.user,
                 captcha=captcha
             )

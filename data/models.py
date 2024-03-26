@@ -1,5 +1,5 @@
 from django.db import models
-from uuid import uuid4
+
 class Note(models.Model):
     uid = models.CharField(max_length=20,blank=True,null=True)
     text = models.TextField(blank=True,null=True)
@@ -55,5 +55,5 @@ class Captcha(models.Model):
 
 class SentCaptcha(models.Model):
     captcha = models.ForeignKey(Captcha, on_delete=models.CASCADE, blank=True, null=True)
-    uid = models.CharField(max_length=255, default=uuid4(), null=True)
+    uid = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey('user.User', on_delete=models.CASCADE, blank=True, null=True)
