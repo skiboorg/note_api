@@ -42,3 +42,21 @@ class DaoRequestSerializer(serializers.ModelSerializer):
 
 
 
+
+
+class VoteTeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VoteTeam
+        exclude = ['votes']
+
+class VoteTeamUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VoteTeamUser
+        fields = '__all__'
+
+
+class VoteSerializer(serializers.ModelSerializer):
+    teams = VoteTeamSerializer(many=True, read_only=True)
+    class Meta:
+        model = Vote
+        fields = '__all__'

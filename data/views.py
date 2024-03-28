@@ -45,7 +45,54 @@ class Upadate(APIView):
         note.save()
         return Response(status=200)
 
+class GetRaffle(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = VoteSerializer
+    queryset = Vote.objects.all()
+    lookup_field = 'id'
 
+class GetRaffles(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = VoteSerializer
+    queryset = Vote.objects.all()#filter(is_active=True)
+
+class GetUserVotes(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        vote_id = self.request.query_params.get('id')
+        vote = Vote.objects.get(id=vote_id)
+        user= request.user
+        votes = []
+        for team in vote.teams.all():
+            team_votes,created = VoteTeamUser.objects.get_or_create(user=user,team=team)
+            votes.append(team_votes)
+        serializer = VoteTeamUserSerializer(votes,many=True)
+        return Response(serializer.data, status=200)
+
+class MakeVote(APIView):
+    def post(self,request):
+        result = {"success": True,"message": "vote done"}
+        print(request.data)
+        user = request.user
+        team = VoteTeam.objects.get(id=request.data['team_id'])
+        if not team.vote.is_active:
+            result = {"success": False, "message": "Time left"}
+            return Response(result, status=200)
+        price = team.vote.vote_price
+        print(price)
+        if not user.balance >= price:
+            result = {"success": False, "message": "You don't have enough coins"}
+            return Response(result, status=200)
+        own_votes = VoteTeamUser.objects.get(user=user, team=team)
+        own_votes.votes += 1
+        own_votes.save()
+
+        user.balance -= price
+        user.save()
+        team.votes += 1
+        team.save()
+
+        return Response(result,status=200)
 class GetCaptcha(APIView):
     permission_classes = [IsAuthenticated]
 

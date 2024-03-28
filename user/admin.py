@@ -10,6 +10,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = (
         'email',
         'twitter',
+        'uid',
         'is_in_wl',
         'fk_wl_1',
         'fk_wl_2',
@@ -29,14 +30,14 @@ class UserAdmin(BaseUserAdmin):
                        'password1',
                        'password2',
                        ), }),)
-    search_fields = ('id','email','code','twitter','wallet', )
+    search_fields = ('id','email','code','twitter','wallet', 'uid',)
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info',
          {'fields': (
 
-
+            'uid',
              'twitter',
              'wallet',
                 "avatar",
@@ -64,10 +65,16 @@ class CodeAdmin(admin.ModelAdmin):
     def use_count(self, obj):
         return User.objects.filter(code=obj.code).count()
 
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = ('from_user', 'to_user', 'amount', 'created_at')
+    search_fields = ('from_user__uid','to_user__uid','amount','from_user__email','to_user__email')
+    model = Transaction
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Code, CodeAdmin)
 admin.site.register(PasswordForm)
+admin.site.register(Transaction, TransactionAdmin)
 
 
 

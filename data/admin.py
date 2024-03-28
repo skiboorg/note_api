@@ -34,4 +34,7 @@ admin.site.register(DaoCode)
 admin.site.register(DaoRequest,DaoRequestAdmin)
 admin.site.register(Captcha)
 admin.site.register(SentCaptcha)
+admin.site.register(Vote)
+admin.site.register(VoteTeam)
+admin.site.register(VoteTeamUser)
 

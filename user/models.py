@@ -58,7 +58,7 @@ class User(AbstractUser):
     username = None
     firstname = None
     lastname = None
-
+    uid = models.CharField('user uid           ',max_length=255, blank=True, null=True, unique=True)
     email = models.CharField(max_length=255, blank=True, null=True, unique=True)
     twitter = models.CharField(max_length=255, blank=True, null=True)
     wallet = models.CharField(max_length=255, blank=True, null=True)
@@ -77,10 +77,15 @@ class User(AbstractUser):
     objects = UserManager()
 
     def __str__(self):
-        return f'{self.email}'
+        return f'{self.email} | {self.uid}'
 
 
 
+class Transaction(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='outcome')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='income')
+    amount = models.IntegerField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 

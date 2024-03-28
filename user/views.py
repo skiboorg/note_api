@@ -24,6 +24,9 @@ class GetUser(generics.RetrieveAPIView):
 
     def get_object(self):
         user = self.request.user
+        if not user.uid:
+            user.uid = f'{create_random_string()}-{create_random_string()}'
+            user.save()
         if not user.can_claim:
             if now() >= user.blocked + datetime.timedelta(seconds=33):
                 user.can_claim = True
@@ -32,6 +35,13 @@ class GetUser(generics.RetrieveAPIView):
         return user
 
 
+class MakeCodes(APIView):
+    def get(self, request):
+        users = User.objects.all()
+        for user in users:
+            user.uid = f'{create_random_string()}-{create_random_string()}'
+            user.save()
+        return Response(status=200)
 class UpdateUser(APIView):
     #parser_classes = [MultiPartParser]
     def post(self,request,*args,**kwargs):
@@ -69,6 +79,28 @@ class SaveForm(APIView):
         return Response(result, status=200)
 
 
+class Send(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        result = {'success': True,"message":"successful sended"}
+        print(request.data)
+        to_user_qs = User.objects.filter(uid=request.data['to'])
+        if not to_user_qs.exists():
+            result = {'success': False, "message": "user uid not found"}
+            return Response(result, status=200)
+        to_user = to_user_qs.first()
+        amount = int(request.data['amount'])
+        amount_with_commission = amount+30
+        if not request.user.balance >= amount_with_commission:
+            result = {'success': False, "message": "not enough coins"}
+            return Response(result, status=200)
+        request.user.balance -= amount_with_commission
+        request.user.save()
+        to_user.balance += amount
+        to_user.save()
+        Transaction.objects.create(from_user=request.user, to_user=to_user, amount=amount)
+        return Response(result, status=200)
 class Claim(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):

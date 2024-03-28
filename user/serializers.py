@@ -21,6 +21,18 @@ from django.contrib.auth.tokens import default_token_generator
 import logging
 logger = logging.getLogger(__name__)
 
+class TransactionSerializer(serializers.ModelSerializer):
+    to_user = serializers.SerializerMethodField()
+    from_user = serializers.SerializerMethodField()
+    class Meta:
+        model = Transaction
+        fields = '__all__'
+
+    def get_to_user(self,obj):
+        return obj.to_user.uid
+
+    def get_from_user(self, obj):
+        return obj.from_user.uid
 
 class UserSaveSerializer(serializers.ModelSerializer):
     class Meta:
@@ -33,9 +45,12 @@ class UserSaveSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    #income = TransactionSerializer(many=True, read_only=True)
+    outcome = TransactionSerializer(many=True, read_only=True)
     class Meta:
         model = User
         fields = [
+            'outcome',
             'email',
             'twitter',
             'wallet',
@@ -43,7 +58,8 @@ class UserSerializer(serializers.ModelSerializer):
             "is_in_wl",
             "code",
             "balance",
-            'can_claim'
+            'can_claim',
+            'uid'
         ]
 
         extra_kwargs = {

@@ -3,3 +3,5 @@ django-cors-headers
 
 djoser
 openpyxl
+celery
+redis

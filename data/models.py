@@ -13,8 +13,6 @@ class Note(models.Model):
     def __str__(self):
         return f'{self.uid}'
 
-
-
 class Link(models.Model):
     note = models.ForeignKey(Note,on_delete=models.CASCADE,blank=True,null=True)
     name = models.CharField(max_length=255, blank=True, null=True)
@@ -57,3 +55,29 @@ class SentCaptcha(models.Model):
     captcha = models.ForeignKey(Captcha, on_delete=models.CASCADE, blank=True, null=True)
     uid = models.CharField(max_length=255, blank=True, null=True)
     user = models.ForeignKey('user.User', on_delete=models.CASCADE, blank=True, null=True)
+
+
+class Vote(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
+    image = models.FileField(upload_to='votes', blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=False, null=False)
+    vote_price = models.IntegerField(default=0, null=True)
+    time_left = models.IntegerField(default=0, null=True)
+
+
+class VoteTeam(models.Model):
+    order_num = models.IntegerField(default=0, null=True)
+    vote = models.ForeignKey(Vote, on_delete=models.CASCADE, blank=True, null=True,related_name='teams')
+    name = models.CharField(max_length=255, blank=True, null=True)
+    image = models.FileField(upload_to='votes', blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    button_color = models.CharField(max_length=255, blank=True, null=True)
+    votes = models.IntegerField(default=0, null=True)
+
+
+class VoteTeamUser(models.Model):
+    team = models.ForeignKey(VoteTeam, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey('user.User', on_delete=models.CASCADE, blank=True, null=True)
+    votes = models.IntegerField(default=0, null=True)
+

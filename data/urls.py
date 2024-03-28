@@ -8,7 +8,10 @@ urlpatterns = [
     path('fill', views.Fill.as_view()),
     path('dao_request', views.DaoRequestView.as_view()),
     path('captha', views.GetCaptcha.as_view()),
-
+    path('raffles', views.GetRaffles.as_view()),
+    path('raffle/<id>', views.GetRaffle.as_view()),
+    path('vote', views.MakeVote.as_view()),
+    path('user_votes', views.GetUserVotes.as_view()),
 
 
 
