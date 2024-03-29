@@ -59,7 +59,7 @@ class CodeAdmin(admin.ModelAdmin):
 
     list_display = ('code', 'is_used', 'is_unlimited','use_count')
     search_fields = ('code',)
-    list_filter=('is_used', 'is_unlimited',)
+    list_filter = ('is_used', 'is_unlimited',)
     model = Code
 
     def use_count(self, obj):
