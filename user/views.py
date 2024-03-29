@@ -90,6 +90,9 @@ class Send(APIView):
             result = {'success': False, "message": "user uid not found"}
             return Response(result, status=200)
         to_user = to_user_qs.first()
+        if to_user == request.user:
+            result = {'success': False, "message": "user not found"}
+            return Response(result, status=200)
         amount = int(request.data['amount'])
         amount_with_commission = amount+30
         if not request.user.balance >= amount_with_commission:
