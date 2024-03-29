@@ -1,5 +1,6 @@
 import json
 
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -62,6 +63,16 @@ class UpdateUser(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_201_CREATED)
 
+class Pagination(PageNumberPagination):
+    page_size = 66
+    page_size_query_param = 'page_size'
+    max_page_size = 10000
+
+class TxHistory(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    queryset = Transaction.objects.all()
+    pagination_class = Pagination
+
 class SaveForm(APIView):
     def post(self, request, *args, **kwargs):
         email = request.data['email']
@@ -102,8 +113,11 @@ class Send(APIView):
         request.user.save()
         to_user.balance += amount
         to_user.save()
-        Transaction.objects.create(from_user=request.user, to_user=to_user, amount=amount)
+        uid = f'DCx{create_random_string(num=16)}'
+        Transaction.objects.create(uid=uid, from_user=request.user, to_user=to_user, amount=amount)
         return Response(result, status=200)
+
+
 class Claim(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
@@ -132,11 +146,19 @@ class Claim(APIView):
             return Response({'s': False}, status=200)
 
         user.balance += request.data['amount']
+        ClaimHistory.objects.create(user=user, amount=request.data['amount'])
         user.save()
         captcha.delete()
         return Response({'s':True},status=200)
 
 
+class CrTxId(APIView):
+    def get(self, request):
+        all_tx = Transaction.objects.all()
+        for tx in all_tx:
+            tx.uid = f'DCx{create_random_string(num=16)}'
+            tx.save()
+        return Response(status=200)
 class CheckWallet(APIView):
     def post(self,request,*args,**kwargs):
         print(request.data)

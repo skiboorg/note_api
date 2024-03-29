@@ -29,12 +29,21 @@ class DaoRequestAdmin(admin.ModelAdmin):
     search_fields = ('twitter', 'dao_twitter',)
     model = DaoRequest
 
+class VoteAdmin(admin.ModelAdmin):
+    list_display = ('name', 'is_active', 'only_one_team','vote_price','time_left',)
+    model = Vote
+
+class VoteTeamAdmin(admin.ModelAdmin):
+    list_display = ('vote', 'name', 'votes',)
+    model = Vote
+
 admin.site.register(Note,NoteAdmin)
 admin.site.register(DaoCode)
 admin.site.register(DaoRequest,DaoRequestAdmin)
 admin.site.register(Captcha)
 admin.site.register(SentCaptcha)
-admin.site.register(Vote)
-admin.site.register(VoteTeam)
+admin.site.register(Vote,VoteAdmin)
+admin.site.register(VoteTeam,VoteTeamAdmin)
 admin.site.register(VoteTeamUser)
+admin.site.register(Stats)
 

@@ -62,8 +62,12 @@ class Vote(models.Model):
     image = models.FileField(upload_to='votes', blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=False, null=False)
+    only_one_team = models.BooleanField(default=False, null=False)
     vote_price = models.IntegerField(default=0, null=True)
     time_left = models.IntegerField(default=0, null=True)
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class VoteTeam(models.Model):
@@ -81,3 +85,8 @@ class VoteTeamUser(models.Model):
     user = models.ForeignKey('user.User', on_delete=models.CASCADE, blank=True, null=True)
     votes = models.IntegerField(default=0, null=True)
 
+
+
+class Stats(models.Model):
+    total_coins = models.IntegerField(default=0, null=True)
+    total_tx_vol = models.IntegerField(default=0, null=True)

@@ -12,6 +12,7 @@ urlpatterns = [
     path('raffle/<id>', views.GetRaffle.as_view()),
     path('vote', views.MakeVote.as_view()),
     path('user_votes', views.GetUserVotes.as_view()),
+    path('stats', views.GetStats.as_view()),
 
 
 

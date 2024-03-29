@@ -66,14 +66,21 @@ class CodeAdmin(admin.ModelAdmin):
         return User.objects.filter(code=obj.code).count()
 
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('from_user', 'to_user', 'amount', 'created_at')
-    search_fields = ('from_user__uid','to_user__uid','amount','from_user__email','to_user__email')
+    list_display = ('uid','from_user', 'to_user', 'amount', 'created_at')
+    search_fields = ('uid','from_user__uid','to_user__uid','amount','from_user__email','to_user__email')
     model = Transaction
+
+class ClaimHistoryAdmin(admin.ModelAdmin):
+    list_display = ('user','amount', 'created_at',)
+    search_fields = ('user',)
+    model = ClaimHistory
+
 
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Code, CodeAdmin)
 admin.site.register(PasswordForm)
+admin.site.register(ClaimHistory,ClaimHistoryAdmin)
 admin.site.register(Transaction, TransactionAdmin)
 
 

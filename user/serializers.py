@@ -45,11 +45,12 @@ class UserSaveSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    #income = TransactionSerializer(many=True, read_only=True)
+    income = TransactionSerializer(many=True, read_only=True)
     outcome = TransactionSerializer(many=True, read_only=True)
     class Meta:
         model = User
         fields = [
+            'income',
             'outcome',
             'email',
             'twitter',

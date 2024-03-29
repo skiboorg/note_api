@@ -56,6 +56,13 @@ class GetRaffles(generics.ListAPIView):
     serializer_class = VoteSerializer
     queryset = Vote.objects.all()#filter(is_active=True)
 
+class GetStats(generics.RetrieveAPIView):
+    serializer_class = StatsSerializer
+
+    def get_object(self):
+        obj, _ = Stats.objects.get_or_create(id=1)
+        return obj
+
 class GetUserVotes(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
