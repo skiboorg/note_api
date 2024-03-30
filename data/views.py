@@ -71,8 +71,12 @@ class GetUserVotes(APIView):
         user= request.user
         votes = []
         for team in vote.teams.all():
-            team_votes,created = VoteTeamUser.objects.get_or_create(user=user,team=team)
-            votes.append(team_votes)
+            try:
+                team_votes = VoteTeamUser.objects.get(user=user,team=team)
+                #team_votes,created = VoteTeamUser.objects.get_or_create(user=user,team=team)
+                votes.append(team_votes)
+            except:
+                pass
         serializer = VoteTeamUserSerializer(votes,many=True)
         return Response(serializer.data, status=200)
 
@@ -82,6 +86,7 @@ class MakeVote(APIView):
         print(request.data)
         user = request.user
         team = VoteTeam.objects.get(id=request.data['team_id'])
+        vote =  team.vote
         if not team.vote.is_active:
             result = {"success": False, "message": "Time left"}
             return Response(result, status=200)
@@ -90,14 +95,38 @@ class MakeVote(APIView):
         if not user.balance >= price:
             result = {"success": False, "message": "You don't have enough coins"}
             return Response(result, status=200)
-        own_votes = VoteTeamUser.objects.get(user=user, team=team)
-        own_votes.votes += 1
-        own_votes.save()
+        #own_votes = VoteTeamUser.objects.get(user=user, team=team)
+        # own_votes, created = VoteTeamUser.objects.get_or_create(user=user, team=team, vote=vote)
+        if team.vote.only_one_team:
+            other_team = VoteTeamUser.objects.filter(user=user, vote=vote)
+            if not other_team.exists():
+                own_votes = VoteTeamUser.objects.create(user=user, team=team, vote=vote)
+                own_votes.votes += 1
+                own_votes.save()
+                user.balance -= price
+                user.save()
+                team.votes += 1
+                team.save()
+            else:
+                try:
+                    own_votes = VoteTeamUser.objects.get(user=user, team=team, vote=vote)
+                    own_votes.votes += 1
+                    own_votes.save()
+                    user.balance -= price
+                    user.save()
+                    team.votes += 1
+                    team.save()
+                except:
+                    pass
 
-        user.balance -= price
-        user.save()
-        team.votes += 1
-        team.save()
+        else:
+            own_votes, created = VoteTeamUser.objects.get_or_create(user=user, team=team, vote=vote)
+            own_votes.votes += 1
+            own_votes.save()
+            user.balance -= price
+            user.save()
+            team.votes += 1
+            team.save()
 
         return Response(result,status=200)
 class GetCaptcha(APIView):

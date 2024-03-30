@@ -79,8 +79,12 @@ class VoteTeam(models.Model):
     button_color = models.CharField(max_length=255, blank=True, null=True)
     votes = models.IntegerField(default=0, null=True)
 
+    class Meta:
+        ordering = ['order_num']
+
 
 class VoteTeamUser(models.Model):
+    vote = models.ForeignKey(Vote, on_delete=models.CASCADE, blank=True, null=True)
     team = models.ForeignKey(VoteTeam, on_delete=models.CASCADE, blank=True, null=True)
     user = models.ForeignKey('user.User', on_delete=models.CASCADE, blank=True, null=True)
     votes = models.IntegerField(default=0, null=True)
