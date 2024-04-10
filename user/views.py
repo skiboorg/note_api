@@ -44,6 +44,7 @@ class MakeCodes(APIView):
             user.save()
         return Response(status=200)
 class UpdateUser(APIView):
+    permission_classes = [IsAuthenticated]
     #parser_classes = [MultiPartParser]
     def post(self,request,*args,**kwargs):
         # print(request.data)
@@ -68,6 +69,51 @@ class Pagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 10000
 
+class BuyUpgrade(APIView):
+    def post(self, request):
+        result = {'s':False,'m':''}
+        print(request.data)
+        upgrade_type = request.data['upgrade']
+        item_id = request.data['id']
+        user = request.user
+        if upgrade_type == 'claim':
+            upgrade = ClaimUpgrade.objects.get(id=item_id)
+            if user.balance < upgrade.price:
+                result['m'] = 'No balance'
+                return Response(result,status=200)
+            qs = user.claim_upgrades.all().filter(claim_upgrade_id=item_id)
+            if qs.exists():
+                result['m'] = 'Already upgraded'
+                return Response(result, status=200)
+            user.balance -= upgrade.price
+            user.save()
+            UserClaimUpgrade.objects.create(user=user,claim_upgrade_id=item_id)
+            result['s'] = True
+            result['m'] = 'Success'
+            return Response(result, status=200)
+        if upgrade_type == 'coin':
+            upgrade = CoinUpgrade.objects.get(id=item_id)
+            if user.balance < upgrade.price:
+                result['m'] = 'No balance'
+                return Response(result,status=200)
+            qs = user.coin_upgrades.all().filter(coin_upgrade_id=item_id)
+            if qs.exists():
+                result['m'] = 'Already upgraded'
+                return Response(result, status=200)
+            user.balance -= upgrade.price
+            user.save()
+            UserCoinsUpgrade.objects.create(user=user,coin_upgrade_id=item_id)
+            result['s'] = True
+            result['m'] = 'Success'
+            return Response(result, status=200)
+        return Response()
+
+
+class Test(APIView):
+    def get(self, request):
+        from .tasks import resetClaim
+        resetClaim()
+        return Response()
 class TxHistory(generics.ListAPIView):
     serializer_class = TransactionSerializer
     queryset = Transaction.objects.all()
@@ -76,7 +122,7 @@ class TxHistory(generics.ListAPIView):
 class SaveForm(APIView):
     def post(self, request, *args, **kwargs):
         email = request.data['email']
-        password = create_random_string(False,8)
+        password = create_random_string(num=8)
         result = {'success': True}
         try:
             user = User.objects.get(email=email)
@@ -124,8 +170,10 @@ class Claim(APIView):
         print(request.data)
         user= request.user
         print(user)
+        if user.claims == 0:
+            return Response({'s': False,'m':'Out of limit'}, status=200)
         if not user.can_claim:
-            return Response({'s': False}, status=200)
+            return Response({'s': False,'m':'Blocked'}, status=200)
         if user.errors >= 99:
             user.can_claim = False
             user.errors = 0
@@ -137,16 +185,17 @@ class Claim(APIView):
         if not sentCap.exists():
             user.errors += 1
             user.save()
-            return Response({'s':False},status=200)
+            return Response({'s':False,'m':'Captcha error! Coins have been burn3d.'},status=200)
         captcha = sentCap[0]
         if captcha.captcha.code != request.data['code']:
             user.errors += 1
             user.save()
             captcha.delete()
-            return Response({'s': False}, status=200)
+            return Response({'s': False,'m':'Captcha error! Coins have been burn3d.'}, status=200)
 
         user.balance += request.data['amount']
         ClaimHistory.objects.create(user=user, amount=request.data['amount'])
+        user.claims -= 1
         user.save()
         captcha.delete()
         return Response({'s':True},status=200)
@@ -159,11 +208,11 @@ class CrTxId(APIView):
             tx.uid = f'DCx{create_random_string(num=16)}'
             tx.save()
         return Response(status=200)
+
 class CheckWallet(APIView):
     def post(self,request,*args,**kwargs):
         print(request.data)
         result = {}
-
         try:
             note = Note.objects.get(wallet=request.data['wallet'])
             wall = User.objects.get(wallet=request.data['wallet'])
@@ -175,3 +224,26 @@ class CheckWallet(APIView):
             result = {'success': False}
 
         return Response(result,status=200)
+
+class CheckWalletWl(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self,request,*args,**kwargs):
+        print(request.data)
+        result = {}
+        serializer = WalletSerializer
+        try:
+            wallet = Wallet.objects.get(wallet=request.data['wallet'])
+            result = serializer(wallet).data
+            result['success'] = True
+        except:
+            result = {'success': False}
+
+        return Response(result,status=200)
+
+class ClaimUpgrades(generics.ListAPIView):
+    queryset = ClaimUpgrade.objects.all()
+    serializer_class = ClaimUpgradeSerializer
+
+class CoinUpgrades(generics.ListAPIView):
+    queryset = CoinUpgrade.objects.all()
+    serializer_class = CoinUpgradeSerializer
