@@ -49,6 +49,7 @@ class UserAdmin(BaseUserAdmin):
              'can_claim',
              'errors',
              'blocked',
+             'claims',
 
          )}
          ),
@@ -75,13 +76,29 @@ class ClaimHistoryAdmin(admin.ModelAdmin):
     search_fields = ('user',)
     model = ClaimHistory
 
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ('wallet','wl', 'wl1', 'wl2',)
+    search_fields = ('wallet',)
+    model = Wallet
 
+class CoinUpgradeAdmin(admin.ModelAdmin):
+    list_display = ('name','price', 'limit_add','click_add', )
+    model = CoinUpgrade
+
+class ClaimUpgradeAdmin(admin.ModelAdmin):
+    list_display = ('name','price', 'claim_add' )
+    model = ClaimUpgrade
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Code, CodeAdmin)
 admin.site.register(PasswordForm)
 admin.site.register(ClaimHistory,ClaimHistoryAdmin)
 admin.site.register(Transaction, TransactionAdmin)
+admin.site.register(Wallet,WalletAdmin)
+admin.site.register(CoinUpgrade,CoinUpgradeAdmin)
+admin.site.register(UserCoinsUpgrade)
+admin.site.register(UserClaimUpgrade)
+admin.site.register(ClaimUpgrade,ClaimUpgradeAdmin)
 
 
 

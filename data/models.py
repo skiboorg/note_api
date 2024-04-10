@@ -94,3 +94,6 @@ class VoteTeamUser(models.Model):
 class Stats(models.Model):
     total_coins = models.IntegerField(default=0, null=True)
     total_tx_vol = models.IntegerField(default=0, null=True)
+
+
+

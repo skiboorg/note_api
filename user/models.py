@@ -71,6 +71,11 @@ class User(AbstractUser):
     errors = models.IntegerField(default=0)
     blocked = models.DateTimeField(blank=True,null=True)
     can_claim = models.BooleanField(default=True, blank=True, null=False)
+    claims = models.IntegerField(default=5, blank=False)
+
+
+
+
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
@@ -96,3 +101,36 @@ class ClaimHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     amount = models.IntegerField(default=0, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class Wallet(models.Model):
+    wallet = models.CharField(max_length=255, blank=True, null=True)
+    wl = models.BooleanField(default=False, blank=True)
+    wl1 = models.BooleanField(default=False, blank=True)
+    wl2 = models.BooleanField(default=False, blank=True)
+
+
+class ClaimUpgrade(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
+    price = models.IntegerField(default=0, null=True)
+    image = models.FileField(upload_to='usr', blank=True, null=True)
+    claim_add = models.IntegerField(default=0, null=True)
+
+
+
+class CoinUpgrade(models.Model):
+    name = models.CharField(max_length=255, blank=True, null=True)
+    price = models.IntegerField(default=0, null=True)
+    image = models.FileField(upload_to='usr', blank=True, null=True)
+    limit_add = models.IntegerField(default=0, null=True)
+    click_add = models.IntegerField(default=0, null=True)
+
+class UserClaimUpgrade(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,related_name='claim_upgrades')
+    claim_upgrade = models.ForeignKey(ClaimUpgrade, on_delete=models.CASCADE, blank=True, null=True)
+
+
+
+class UserCoinsUpgrade(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,related_name='coin_upgrades')
+    coin_upgrade = models.ForeignKey(CoinUpgrade, on_delete=models.CASCADE, blank=True, null=True)
