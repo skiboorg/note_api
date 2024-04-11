@@ -52,7 +52,7 @@ class GetRaffle(generics.RetrieveAPIView):
     lookup_field = 'id'
 
 class GetRaffles(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
     serializer_class = VoteSerializer
     queryset = Vote.objects.all()#filter(is_active=True)
 
@@ -117,7 +117,7 @@ class MakeVote(APIView):
                     team.votes += 1
                     team.save()
                 except:
-                    pass
+                    result = {"success": False,"message": "you already voted for another team!"}
 
         else:
             own_votes, created = VoteTeamUser.objects.get_or_create(user=user, team=team, vote=vote)

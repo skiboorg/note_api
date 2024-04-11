@@ -47,7 +47,7 @@ class DaoRequestSerializer(serializers.ModelSerializer):
 class VoteTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = VoteTeam
-        exclude = ['votes']
+        fields = '__all__'
 
 class VoteTeamUserSerializer(serializers.ModelSerializer):
     class Meta:
