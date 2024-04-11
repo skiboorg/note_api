@@ -226,7 +226,7 @@ class CheckWallet(APIView):
         return Response(result,status=200)
 
 class CheckWalletWl(APIView):
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
     def post(self,request,*args,**kwargs):
         print(request.data)
         result = {}
