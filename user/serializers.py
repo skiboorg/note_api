@@ -99,7 +99,7 @@ class UserSerializer(serializers.ModelSerializer):
         }
 
     def get_total_claimes(self, obj):
-        result = 10
+        result = 3
         for upgrade in obj.claim_upgrades.all():
             print(upgrade)
             result += upgrade.claim_upgrade.claim_add

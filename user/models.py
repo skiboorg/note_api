@@ -71,7 +71,7 @@ class User(AbstractUser):
     errors = models.IntegerField(default=0)
     blocked = models.DateTimeField(blank=True,null=True)
     can_claim = models.BooleanField(default=True, blank=True, null=False)
-    claims = models.IntegerField(default=5, blank=False)
+    claims = models.IntegerField(default=3, blank=False)
 
 
 
