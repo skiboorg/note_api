@@ -231,11 +231,11 @@ class CheckWalletWl(APIView):
         print(request.data)
         result = {}
         serializer = WalletSerializer
-        try:
-            wallet = Wallet.objects.filter(wallet=request.data['wallet']).first()
-            result = serializer(wallet).data
+        wallets = Wallet.objects.filter(wallet=request.data['wallet'])
+        if wallets.exists():
+            result = serializer(wallets.first()).data
             result['success'] = True
-        except:
+        else:
             result = {'success': False}
 
         return Response(result,status=200)
