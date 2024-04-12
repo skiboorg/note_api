@@ -232,7 +232,7 @@ class CheckWalletWl(APIView):
         result = {}
         serializer = WalletSerializer
         try:
-            wallet = Wallet.objects.get(wallet=request.data['wallet'])
+            wallet = Wallet.objects.filter(wallet=request.data['wallet']).first()
             result = serializer(wallet).data
             result['success'] = True
         except:
