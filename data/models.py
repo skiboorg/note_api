@@ -80,6 +80,10 @@ class VoteTeam(models.Model):
     button_color = models.CharField(max_length=255, blank=True, null=True)
     votes = models.IntegerField(default=0, null=True)
     winner = models.BooleanField(default=False, null=False)
+
+
+    def __str__(self):
+        return f'{self.name}'
     class Meta:
         ordering = ['order_num']
 

@@ -37,6 +37,11 @@ class VoteTeamAdmin(admin.ModelAdmin):
     list_display = ('vote', 'name', 'votes',)
     model = Vote
 
+
+class VoteTeamUserAdmin(admin.ModelAdmin):
+    list_display = ('user', 'team', 'votes',)
+    model = VoteTeamUser
+
 admin.site.register(Note,NoteAdmin)
 admin.site.register(DaoCode)
 admin.site.register(DaoRequest,DaoRequestAdmin)
@@ -44,6 +49,6 @@ admin.site.register(Captcha)
 admin.site.register(SentCaptcha)
 admin.site.register(Vote,VoteAdmin)
 admin.site.register(VoteTeam,VoteTeamAdmin)
-admin.site.register(VoteTeamUser)
+admin.site.register(VoteTeamUser,VoteTeamUserAdmin)
 admin.site.register(Stats)
 
