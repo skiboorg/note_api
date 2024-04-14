@@ -63,6 +63,7 @@ class Vote(models.Model):
     description = models.TextField(blank=True, null=True)
     is_active = models.BooleanField(default=False, null=False)
     only_one_team = models.BooleanField(default=False, null=False)
+    show_results = models.BooleanField(default=False, null=False)
     vote_price = models.IntegerField(default=0, null=True)
     time_left = models.IntegerField(default=0, null=True)
 
@@ -78,7 +79,7 @@ class VoteTeam(models.Model):
     description = models.TextField(blank=True, null=True)
     button_color = models.CharField(max_length=255, blank=True, null=True)
     votes = models.IntegerField(default=0, null=True)
-
+    winner = models.BooleanField(default=False, null=False)
     class Meta:
         ordering = ['order_num']
 
