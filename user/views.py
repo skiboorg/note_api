@@ -116,7 +116,7 @@ class Test(APIView):
         #     code.code = code.code.upper()
         #     code.save()
         from .tasks import resetClaim
-        resetClaim()
+        resetClaim.delay()
         return Response()
 class TxHistory(generics.ListAPIView):
     serializer_class = TransactionSerializer
