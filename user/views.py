@@ -111,12 +111,12 @@ class BuyUpgrade(APIView):
 
 class Test(APIView):
     def get(self, request):
-        codes = Code.objects.all()
-        for code in codes:
-            code.code = code.code.upper()
-            code.save()
-        # from .tasks import resetClaim
-        # resetClaim()
+        # codes = Code.objects.all()
+        # for code in codes:
+        #     code.code = code.code.upper()
+        #     code.save()
+        from .tasks import resetClaim
+        resetClaim()
         return Response()
 class TxHistory(generics.ListAPIView):
     serializer_class = TransactionSerializer
