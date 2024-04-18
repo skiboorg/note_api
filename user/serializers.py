@@ -20,6 +20,13 @@ from django.contrib.auth.tokens import default_token_generator
 
 import logging
 logger = logging.getLogger(__name__)
+
+
+class MintWalletSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mint
+        fields = '__all__'
+
 class UserClaimUpgradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserClaimUpgrade

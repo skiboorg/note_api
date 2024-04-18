@@ -101,4 +101,23 @@ class Stats(models.Model):
     total_tx_vol = models.IntegerField(default=0, null=True)
 
 
+class Ticket(models.Model):
+    subject = models.CharField(max_length=255, blank=True, null=True)
+    text = models.CharField(max_length=255, blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
+    tw = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
 
+
+class MintImage(models.Model):
+    image = models.FileField(upload_to='mint',blank=True,null=True)
+    def __str__(self):
+        return f'{self.id}'
+
+
+class MintSettings(models.Model):
+    active = models.BooleanField(default=False, null=False)
+    show_in_menu = models.BooleanField(default=False, null=False)
+    wl = models.BooleanField(default=False, null=False)
+    wl1 = models.BooleanField(default=False, null=False)
+    public = models.BooleanField(default=False, null=False)

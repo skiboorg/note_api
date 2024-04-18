@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import *
 from .models import *
 from rest_framework import generics, viewsets, parsers
-from data.models import Note,SentCaptcha
+from data.models import Note, SentCaptcha, MintSettings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 import logging
@@ -251,3 +251,52 @@ class ClaimUpgrades(generics.ListAPIView):
 class CoinUpgrades(generics.ListAPIView):
     queryset = CoinUpgrade.objects.all()
     serializer_class = CoinUpgradeSerializer
+
+
+class Mintt(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        result = {'success': False}
+        mints = Mint.objects.filter(user=request.user)
+        if mints.exists():
+            serializer = MintWalletSerializer(mints.first(), many=False)
+            result = {'success': True, "info": serializer.data}
+        return Response(result, status=200)
+
+    def post(self,request,*args,**kwargs):
+        settings, _ = MintSettings.objects.get_or_create(id=1)
+        print(request.data)
+        user = request.user
+        result = {}
+        i_send = request.data.get("uid",False)
+        if i_send:
+            mint = Mint.objects.get(wallet=request.data['wallet'], checked=True)
+            mint.send = True
+            mint.save()
+            result = {'success': True, 'message': 'Bot checking ur payment and confirming it'}
+        else:
+            if not settings.public:
+                wallets_in_wl = None
+                if settings.wl:
+                    wallets_in_wl = Wallet.objects.filter(wallet=request.data['wallet'], wl=True)
+                if settings.wl1:
+                    wallets_in_wl = Wallet.objects.filter(wallet=request.data['wallet'], wl1=True)
+                if not wallets_in_wl.exists():
+                    result = {'success': False, 'message': 'Your wallet is not on the list. Please wait for the next wave.'}
+                    return Response(result, status=200)
+            if user.balance < 333:
+                result = {'success': False, 'message': 'No money'}
+                return Response(result, status=200)
+            user.balance -= 333
+            user.save()
+
+            wallet_used = Mint.objects.filter(wallet=request.data['wallet'])
+            if wallet_used.exists():
+                result = {'success': False, 'message': 'This wallet has already been used. Write to us in support using the button below if this is your wallet.'}
+                return Response(result, status=200)
+            else:
+                Mint.objects.create(user=user, wallet=request.data['wallet'], checked=True)
+            result = {'success': True, 'message': 'Success'}
+
+
+        return Response(result,status=200)

@@ -132,3 +132,13 @@ class UserClaimUpgrade(models.Model):
 class UserCoinsUpgrade(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True,related_name='coin_upgrades')
     coin_upgrade = models.ForeignKey(CoinUpgrade, on_delete=models.CASCADE, blank=True, null=True)
+
+
+
+class Mint(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    wallet = models.CharField(max_length=255, blank=True, null=True)
+    checked = models.BooleanField(default=False, blank=True)
+    send = models.BooleanField(default=False, blank=True)
+    receive = models.BooleanField(default=False, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True)

@@ -89,6 +89,12 @@ class ClaimUpgradeAdmin(admin.ModelAdmin):
     list_display = ('name','price', 'claim_add' )
     model = ClaimUpgrade
 
+class MintAdmin(admin.ModelAdmin):
+    list_display = ('user','wallet', 'send', 'receive','created_at', )
+    search_fields = ('user','wallet',)
+    list_filter = ('send', 'receive',)
+    model = Mint
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Code, CodeAdmin)
 admin.site.register(PasswordForm)
@@ -99,6 +105,7 @@ admin.site.register(CoinUpgrade,CoinUpgradeAdmin)
 admin.site.register(UserCoinsUpgrade)
 admin.site.register(UserClaimUpgrade)
 admin.site.register(ClaimUpgrade,ClaimUpgradeAdmin)
+admin.site.register(Mint, MintAdmin)
 
 
 

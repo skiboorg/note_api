@@ -42,6 +42,14 @@ class VoteTeamUserAdmin(admin.ModelAdmin):
     list_display = ('user', 'team', 'votes',)
     model = VoteTeamUser
 
+class TicketAdmin(admin.ModelAdmin):
+    list_display = ('subject',
+
+'email',
+'tw',
+'created_at',)
+    model = Ticket
+
 admin.site.register(Note,NoteAdmin)
 admin.site.register(DaoCode)
 admin.site.register(DaoRequest,DaoRequestAdmin)
@@ -51,4 +59,7 @@ admin.site.register(Vote,VoteAdmin)
 admin.site.register(VoteTeam,VoteTeamAdmin)
 admin.site.register(VoteTeamUser,VoteTeamUserAdmin)
 admin.site.register(Stats)
+admin.site.register(MintImage)
+admin.site.register(MintSettings)
+admin.site.register(Ticket,TicketAdmin)
 

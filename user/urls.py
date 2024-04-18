@@ -8,6 +8,7 @@ urlpatterns = [
     path('update', views.UpdateUser.as_view()),
     path('check12', views.CheckWallet.as_view()),
     path('check-wallet', views.CheckWalletWl.as_view()),
+    path('mint', views.Mintt.as_view()),
     path('cr_tx_id', views.CrTxId.as_view()),
     path('send', views.Send.as_view()),
     path('claim', views.Claim.as_view()),

@@ -13,6 +13,9 @@ urlpatterns = [
     path('vote', views.MakeVote.as_view()),
     path('user_votes', views.GetUserVotes.as_view()),
     path('stats', views.GetStats.as_view()),
+    path('mint', views.GetMintSettings.as_view()),
+    path('image', views.GetMintImage.as_view()),
+    path('ticket', views.NewTicket.as_view()),
 
 
 

@@ -44,6 +44,19 @@ class DaoRequestSerializer(serializers.ModelSerializer):
 
 
 
+class MintImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MintImage
+        fields = '__all__'
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+        fields = '__all__'
+
+class MintSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MintSettings
+        fields = '__all__'
 class VoteTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = VoteTeam
