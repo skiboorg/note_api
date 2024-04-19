@@ -140,7 +140,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = tuple(User.REQUIRED_FIELDS) + (
             'email',
             'password',
-            'code',
+            # 'code',
             'twitter',
             'wallet',
 
@@ -171,24 +171,25 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user
 
     def perform_create(self, validated_data):
-        print(validated_data)
-        code = validated_data.get('code')
-        code_in_db = None
-        try:
-            code_in_db = Code.objects.get(code=code)
-        except:
-            self.fail("invalid_code")
-        if code_in_db:
 
-            if not code_in_db.is_unlimited and code_in_db.is_used:
-                self.fail("invalid_code")
-            else:
-                if code_in_db.use_number > 0:
-                    code_in_db.use_number -= 1
-                    code_in_db.save()
-                else:
-                    code_in_db.is_used = True
-                    code_in_db.save()
+        # print(validated_data)
+        # code = validated_data.get('code')
+        # code_in_db = None
+        # try:
+        #     code_in_db = Code.objects.get(code=code)
+        # except:
+        #     self.fail("invalid_code")
+        # if code_in_db:
+        #
+        #     if not code_in_db.is_unlimited and code_in_db.is_used:
+        #         self.fail("invalid_code")
+        #     else:
+        #         if code_in_db.use_number > 0:
+        #             code_in_db.use_number -= 1
+        #             code_in_db.save()
+        #         else:
+        #             code_in_db.is_used = True
+        #             code_in_db.save()
 
         with transaction.atomic():
             user = User.objects.create_user(**validated_data)
