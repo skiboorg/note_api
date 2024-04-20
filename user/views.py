@@ -292,7 +292,7 @@ class Mintt(APIView):
 
             wallet_used = Mint.objects.filter(wallet=request.data['wallet'])
             if wallet_used.exists():
-                result = {'success': False, 'message': 'This wallet has already been used. Write to us in support using the button below if this is your wallet.'}
+                result = {'success': False, 'message': 'This wallet has already been used. If this is your wallet, please contact support by clicking the "Create Ticket" button below.'}
                 return Response(result, status=200)
             else:
                 Mint.objects.create(user=user, wallet=request.data['wallet'], checked=True)
