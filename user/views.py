@@ -285,7 +285,7 @@ class Mintt(APIView):
                     result = {'success': False, 'message': 'Your wallet is not on the list. Please wait for the next wave.'}
                     return Response(result, status=200)
             if user.balance < 333:
-                result = {'success': False, 'message': 'No money'}
+                result = {'success': False, 'message': 'not enough coins'}
                 return Response(result, status=200)
             user.balance -= 333
             user.save()
