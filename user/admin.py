@@ -90,8 +90,8 @@ class ClaimUpgradeAdmin(admin.ModelAdmin):
     model = ClaimUpgrade
 
 class MintAdmin(admin.ModelAdmin):
-    list_display = ('user','wallet', 'send', 'receive','created_at', )
-    search_fields = ('user','wallet',)
+    list_display = ('user','wallet','send_wallet', 'send', 'receive','created_at', )
+    search_fields = ('user','wallet','send_wallet')
     list_filter = ('send', 'receive',)
     model = Mint
 

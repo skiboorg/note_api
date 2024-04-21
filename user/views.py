@@ -295,7 +295,7 @@ class Mintt(APIView):
                 result = {'success': False, 'message': 'This wallet has already been used. If this is your wallet, please contact support by clicking the "Create Ticket" button below.'}
                 return Response(result, status=200)
             else:
-                Mint.objects.create(user=user, wallet=request.data['wallet'], checked=True)
+                Mint.objects.create(user=user, wallet=request.data['wallet'], send_wallet=request.data['send_wallet'], checked=True)
             result = {'success': True, 'message': 'Success'}
 
 
