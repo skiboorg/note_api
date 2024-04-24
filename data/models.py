@@ -117,6 +117,7 @@ class MintImage(models.Model):
 
 class MintSettings(models.Model):
     active = models.BooleanField(default=False, null=False)
+    text = models.CharField(max_length=255, blank=True, null=True)
     show_in_menu = models.BooleanField(default=False, null=False)
     wl = models.BooleanField(default=False, null=False)
     wl1 = models.BooleanField(default=False, null=False)

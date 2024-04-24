@@ -269,6 +269,16 @@ class Mintt(APIView):
         user = request.user
         result = {}
         i_send = request.data.get("uid",False)
+        priority = request.data.get("priority")
+        need_balance = 0
+        if priority == "Standart":
+            need_balance += 0
+        elif priority == "Medium":
+            need_balance += 333
+        elif priority == "High":
+            need_balance += 666
+        else:
+            need_balance += 666879789
         if i_send:
             mint = Mint.objects.get(wallet=request.data['wallet'], checked=True)
             mint.send = True
@@ -282,12 +292,12 @@ class Mintt(APIView):
                 if settings.wl1:
                     wallets_in_wl = Wallet.objects.filter(wallet=request.data['wallet'], wl1=True)
                 if not wallets_in_wl.exists():
-                    result = {'success': False, 'message': 'Your wallet is not on the list. Please wait for the next wave.'}
+                    result = {'success': False, 'message': 'Your receive wallet is not on the list. please wait for next wave'}
                     return Response(result, status=200)
-            if user.balance < 333:
+            if user.balance < need_balance:
                 result = {'success': False, 'message': 'not enough coins'}
                 return Response(result, status=200)
-            user.balance -= 333
+            user.balance -= need_balance
             user.save()
 
             wallet_used = Mint.objects.filter(wallet=request.data['wallet'])
