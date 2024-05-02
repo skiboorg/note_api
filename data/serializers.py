@@ -57,16 +57,25 @@ class MintSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = MintSettings
         fields = '__all__'
-class VoteTeamSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = VoteTeam
-        fields = '__all__'
+
 
 class VoteTeamUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = VoteTeamUser
         fields = '__all__'
 
+class VoteTeamSerializer(serializers.ModelSerializer):
+    users = serializers.SerializerMethodField()
+    class Meta:
+        model = VoteTeam
+        fields = '__all__'
+
+    def get_users(self,obj):
+        print(obj.users.all())
+        ids = []
+        for user in obj.users.all():
+            ids.append(user.user.uid)
+        return ids
 
 class VoteSerializer(serializers.ModelSerializer):
     teams = VoteTeamSerializer(many=True, read_only=True)
