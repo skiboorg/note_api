@@ -29,3 +29,9 @@ def checkVotes():
             vote.is_active = False
         vote.save()
 
+@shared_task
+def mintTimer():
+    settings = MintSettings.objects.get(id=1)
+    if settings.time_left > 0:
+        settings.time_left -= 1
+        settings.save()

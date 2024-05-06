@@ -271,7 +271,7 @@ class Mintt(APIView):
         i_send = request.data.get("uid",False)
         priority = request.data.get("priority")
         need_balance = 0
-        if priority == "Standart":
+        if priority == "Low":
             need_balance += 0
         elif priority == "Medium":
             need_balance += 333
@@ -305,7 +305,7 @@ class Mintt(APIView):
                 result = {'success': False, 'message': 'This wallet has already been used. If this is your wallet, please contact support by clicking the "Create Ticket" button below.'}
                 return Response(result, status=200)
             else:
-                Mint.objects.create(user=user, wallet=request.data['wallet'], send_wallet=request.data['send_wallet'], checked=True)
+                Mint.objects.create(user=user, wallet=request.data['wallet'],priority=priority, send_wallet=request.data['send_wallet'], checked=True)
             result = {'success': True, 'message': 'Success'}
 
 

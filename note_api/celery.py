@@ -16,6 +16,11 @@ app.conf.beat_schedule = {
         'schedule': crontab(minute='*/1')
 
     },
+    'mintTimer': {
+        'task': 'data.tasks.mintTimer',
+        'schedule': crontab(minute='*/1')
+
+    },
     'calcStats': {
             'task': 'data.tasks.calcStats',
             'schedule': crontab(minute='*/5')

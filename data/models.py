@@ -124,3 +124,4 @@ class MintSettings(models.Model):
     wl1 = models.BooleanField(default=False, null=False)
     public = models.BooleanField(default=False, null=False)
     sold = models.IntegerField(default=0, null=True)
+    time_left = models.IntegerField(default=0, null=True)
