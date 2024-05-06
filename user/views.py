@@ -274,9 +274,9 @@ class Mintt(APIView):
         if priority == "Low":
             need_balance += 0
         elif priority == "Medium":
-            need_balance += 333
+            need_balance += 300
         elif priority == "High":
-            need_balance += 666
+            need_balance += 3000
         else:
             need_balance += 666879789
         if i_send:
