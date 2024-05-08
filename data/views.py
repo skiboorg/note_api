@@ -1,6 +1,6 @@
 import json
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import *
@@ -58,7 +58,7 @@ class GetRaffles(generics.ListAPIView):
 
 class GetMintSettings(generics.RetrieveAPIView):
     serializer_class = MintSettingsSerializer
-
+    permission_classes = [IsAuthenticatedOrReadOnly]
     def get_object(self):
         obj, _ = MintSettings.objects.get_or_create(id=1)
         return obj
